@@ -4,10 +4,10 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "webpack serve --mode development",
+    "start": "concurrently \"cross-env NODE_ENV=development webpack serve --mode development\" \"cross-env NODE_ENV=development electron .\"",
     "build": "webpack --mode production",
     "electron": "electron .",
-    "electron-dev": "npm run build && electron ."
+    "electron-dev": "cross-env NODE_ENV=development electron ."
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,10 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
     "babel-loader": "^9.2.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^33.2.0",
+    "electron-reloader": "^1.2.3",
     "html-webpack-plugin": "^5.6.3",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",

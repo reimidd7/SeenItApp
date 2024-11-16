@@ -2,10 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+    mode: 'development',
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
+        publicPath: '/'
     },
     module: {
         rules: [
@@ -30,8 +32,13 @@ module.exports = {
         }),
     ],
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        compress: true,
+        static: {
+            directory: path.join(__dirname, 'dist'),
+        },
+        hot: true,
         port: 3000,
+        historyApiFallback: true
     },
+
+    target: 'electron-renderer'
 };

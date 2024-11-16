@@ -1,21 +1,37 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const isDev = process.env.NODE_ENV === 'development';
+
+try {
+    if (isDev) {
+        require('electron-reloader')(module, {
+            debug: true,
+            watchRenderer: true
+        });
+    }
+} catch (_) { console.log('Error'); }
+
+let mainWindow;
 
 function createWindow() {
-    const win = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false,
         },
     });
 
-    win.loadURL(`file://${path.join(__dirname, 'dist', 'index.html')}`);
+    if (isDev) {
+        mainWindow.loadURL('http://localhost:3000');
+        mainWindow.webContents.openDevTools();
+    } else {
+        mainWindow.loadURL(`file://${path.join(__dirname, 'dist', 'index.html')}`);
+    }
 }
 
-app.on('ready', createWindow);
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
