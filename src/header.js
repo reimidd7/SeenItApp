@@ -3,7 +3,9 @@ import React from "react";
 const Header = ({ currentTab, setCurrentTab }) => {
     return (
         <header style={styles.header}>
-            <h1 style={styles.title} >SeenIt</h1>
+            <button onClick={() => setCurrentTab('home')} style={styles.title}>
+                    SeenIt
+                </button>
             <nav style={styles.nav}>
                 <button onClick={() => setCurrentTab('search')} style={styles.navButton}>
                     Search Shows
@@ -35,11 +37,32 @@ const styles = {
         cursor: 'pointer', // Change cursor to pointer on hover
         borderRadius: '18px', // Make the button round (higher values make it more oval)
         fontSize: '16px', // Adjust font size if needed
+        fontFamily: 'verdana, sans-serif',
+        textShadow: `
+            -1px -1px 0 #8790A1, 
+             1px -1px 0 #8790A1, 
+             -1px 1px 0 #8790A1, 
+             1px 1px 0 #8790A1
+        `,
 
     },
     title: {
         margin: 0,
         fontSize: '32px',
+        background: '#718F94',
+        color: '#F2F2EE',
+        padding: '5px',
+        textAlign: 'center',
+        border: 'none',
+        cursor: 'pointer',
+        fontFamily: 'verdana, sans-serif',
+        textShadow: `
+            -1px -1px 0 #8790A1, 
+             1px -1px 0 #8790A1, 
+             -1px 1px 0 #8790A1, 
+             1px 1px 0 #8790A1
+        `,
+        
     },
     nav: {
         display: 'flex',
