@@ -9,7 +9,7 @@ const Home = () => {
 };
 
 const styles = {
-    container: {}
+    container: {
         width: '100%',           // Full width
         height: 'calc(100vh - 94px)',          // Full height of the content container
         boxSizing: 'border-box', // Include padding in dimensions
