@@ -3,7 +3,14 @@ import React from "react";
 const Home = () => {
     return (
         <div style={styles.container}>
-            <p>HOME</p>
+             <nav style={styles.nav}>
+                <button onClick={() => setCurrentTab('search')} style={styles.navButton}>
+                    Search
+                </button>
+                <button onClick={() => setCurrentTab('watched')} style={styles.navButton}>
+                    Watched List 
+                </button>
+            </nav>
         </div>
     );
 };

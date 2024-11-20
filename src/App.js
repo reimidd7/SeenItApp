@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react'; // kinda like action listeners
 import Home from './home';
 import Header from './header';
+import Search from './search';
 
 
 const App = () => {
@@ -14,7 +15,7 @@ const App = () => {
                 <Home/>
             )}
             {currentTab === 'search' && (
-                <p>Search Shows Component Goes Here</p>
+                <Search/>
             )}
             {currentTab === 'watched' && (
                 <p>Watched Shows Component Goes Here</p>
