@@ -38,6 +38,7 @@ const styles = {
     container: {
         width: '100%',           // Full width
         height: 'calc(100vh - 94px)',          // Full height of the content container
+        overflowY: 'auto',
         boxSizing: 'border-box', // Include padding in dimensions
         display: 'flex',         // Flexbox for alignment
         flexDirection: 'column',
@@ -61,7 +62,6 @@ const styles = {
     list: {
         display: "flex",
         flexDirection: "column",
-        overflowY: 'auto',
         gap: "20px",
         width: "100%",
         maxWidth: "800px",
@@ -83,13 +83,13 @@ const styles = {
     details: {
         marginLeft: "15px",
         display: "flex",
-        flexDirection: "column",
         justifyContent: "space-around",
     },
     titleText: {
         fontSize: theme.fonts.size.medium,
         fontFamily: theme.fonts.family,
         color: theme.colors.lightShade,
+        marginRight: "15px",
     },
     subDetails: {
         fontSize: theme.fonts.size.small,
