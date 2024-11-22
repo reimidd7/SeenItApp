@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import theme from "./theme";
 
-const Search = ({addToWatched}) => {
+const Search = ({ addToWatched }) => {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -50,9 +50,15 @@ const Search = ({addToWatched}) => {
         }, 2000);
     };
 
+    const formatDateRange = (firstAirDate, lastAirDate) => {
+        const startYear = firstAirDate ? firstAirDate.slice(0, 4) : "unknown";
+        
+        return `${startYear}`;
+    }
+
     return (
         <div style={styles.container}>
-             <input
+            <input
                 type="text"
                 placeholder="Search..."
                 value={query}
@@ -65,16 +71,21 @@ const Search = ({addToWatched}) => {
             <div style={styles.results}>
                 {results.map((show) => (
                     <div key={show.id} style={styles.resultItem}>
-                        <p>{show.name}</p>
+                        <p>
+                            {show.name}{" "}
+                            <span style={styles.date}>
+                            ({formatDateRange(show.first_air_date)})
+                            </span>
+                        </p>
                         <button
-                        onClick={() => handleAddToWatched(show)}
-                        style={{
-                            ...styles.addButton,
-                            ...(addedShows[show.id] ? styles.addedButton : {}),
-                        }}
-                    >
-                        {addedShows[show.id] ? "Added" : "Add to Watched"}
-                    </button>
+                            onClick={() => handleAddToWatched(show)}
+                            style={{
+                                ...styles.addButton,
+                                ...(addedShows[show.id] ? styles.addedButton : {}),
+                            }}
+                        >
+                            {addedShows[show.id] ? "Added" : "Add to Watched"}
+                        </button>
                     </div>
                 ))}
             </div>
@@ -91,7 +102,7 @@ const styles = {
         alignItems: 'center',    // Center children vertically
         justifyContent: 'flex-start', // Align content towards the top
         backgroundColor: theme.colors.mainColor,
-    
+
     },
 
     searchBar: {
@@ -106,7 +117,7 @@ const styles = {
         backgroundColor: theme.colors.lightShade,
         fontFamily: theme.fonts.family, // Font style
         color: theme.colors.darkAccent,
-    
+
     },
     results: {
         marginTop: "10px",
@@ -115,7 +126,7 @@ const styles = {
         overflowY: 'auto',
         backgroundColor: theme.colors.lightAccent,
         borderRadius: '10px',
-        padding:' 10px',
+        padding: ' 10px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     },
     resultItem: {
@@ -147,6 +158,11 @@ const styles = {
     loadingMessage: {
         color: theme.colors.lightShade,
         marginTop: '10px',
+    },
+    date: {
+        fontStyle: "italic",
+        fontSize: "0.9em",
+        color: theme.colors.lightAccent,
     },
 
 };
