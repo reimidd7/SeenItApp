@@ -6,6 +6,7 @@ import Search from './search';
 import Watched from './watched';
 
 
+
 const App = () => {
     const [currentTab, setCurrentTab] = useState('home');
     const [watched, setWatched] = useState([]);

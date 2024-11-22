@@ -1,23 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import theme from "./theme";
 
 const Search = ({addToWatched}) => {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [addedShows, setAddedShows] = useState({});
 
-    const handleSearch = async () => {
-        if (query.trim() === "") return;
+    useEffect(() => {
+        const fetchResults = async () => {
+            if (!query.trim()) {
+                setResults([]);
+                return;
+            }
 
-        const apiKey = "a4d85f4a0138ffbd06d3be2bfb02dbcf";
-        const url = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&query=${encodeURIComponent(query)}`;
-        
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            setResults(data.results || []);
+            setIsLoading(true);
+            const apiKey = "a4d85f4a0138ffbd06d3be2bfb02dbcf";
+            const url = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&query=${encodeURIComponent(query)}`;
 
-        } catch (error) {
-            console.error("Error fetching search results:", error);
-        }
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                setResults(data.results || []);
+            } catch (error) {
+                console.error("Error fetching search results: ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        const delayDebounce = setTimeout(fetchResults, 300);
+
+        return () => clearTimeout(delayDebounce);
+    }, [query]);
+
+    const handleAddToWatched = (show) => {
+        addToWatched(show);
+        setAddedShows((prev) => ({
+            ...prev,
+            [show.id]: true, // mark show as added
+        }));
+
+        // revert button to normal after 2 sec
+        setTimeout(() => {
+            setAddedShows((prev) => ({
+                ...prev,
+                [show.id]: false,
+            }));
+        }, 2000);
     };
 
     return (
@@ -29,20 +59,22 @@ const Search = ({addToWatched}) => {
                 onChange={(e) => setQuery(e.target.value)}
                 style={styles.searchBar}
             />
-            <button onClick={handleSearch} style={styles.resultItem}>
-                Search
-            </button>
+
+            {isLoading && <p style={styles.loadingMessage}>Loading...</p>}
 
             <div style={styles.results}>
                 {results.map((show) => (
                     <div key={show.id} style={styles.resultItem}>
                         <p>{show.name}</p>
                         <button
-                        onClick={() => addToWatched(show)}
-                        style={styles.addButton}
-                        >
-                            Add to Watched
-                        </button>
+                        onClick={() => handleAddToWatched(show)}
+                        style={{
+                            ...styles.addButton,
+                            ...(addedShows[show.id] ? styles.addedButton : {}),
+                        }}
+                    >
+                        {addedShows[show.id] ? "Added" : "Add to Watched"}
+                    </button>
                     </div>
                 ))}
             </div>
@@ -53,57 +85,68 @@ const Search = ({addToWatched}) => {
 const styles = {
     container: {
         width: '100%',           // Full width
-        height: 'calc(100vh - 94px)',          // Full height of the content container
-        boxSizing: 'border-box', // Include padding in dimensions
+        height: 'calc(100vh - 100px)',          // Full height of the content container
         display: 'flex',         // Flexbox for alignment
-        justifyContent: 'center', // Center children horizontally
+        flexDirection: 'column',
         alignItems: 'center',    // Center children vertically
-        backgroundColor: '#718F94',
+        justifyContent: 'flex-start', // Align content towards the top
+        backgroundColor: theme.colors.mainColor,
     
     },
 
     searchBar: {
         width: '300px', // Width of the search bar
         padding: '10px', // Padding inside the input
+        marginBottom: '5px',
+        marginTop: '15px',
         border: '1px solid #F2F2EE', // Border color
         borderRadius: '20px', // Rounded corners
-        fontSize: '16px', // Text size
+        fontSize: theme.fonts.size.medium, // Text size
         outline: 'none', // Remove outline on focus
-        background: '#F2F2EE',
-        fontFamily: 'Arial, sans-serif', // Font style
-        color: '#455861',
+        backgroundColor: theme.colors.lightShade,
+        fontFamily: theme.fonts.family, // Font style
+        color: theme.colors.darkAccent,
     
     },
-    searchButton: {
-        padding: "10px 15px",
-        borderRadius: "20px",
-        backgroundColor: "#5D737E",
-        color: "#F2F2EE",
-        border: "none",
-        cursor: "pointer",
-    },
     results: {
-        marginTop: "20px",
-        width: "300px",
-        display: "flex",
-        flexDirection: "column",
+        marginTop: "10px",
+        width: "500px",
+        maxHeight: '400px',
+        overflowY: 'auto',
+        backgroundColor: theme.colors.lightAccent,
+        borderRadius: '10px',
+        padding:' 10px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     },
     resultItem: {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "10px",
-        backgroundColor: "#94A4A4",
+        padding: "5px",
+        backgroundColor: theme.colors.darkShade,
         margin: "5px 0",
         borderRadius: "10px",
+        color: theme.colors.lightShade,
+        fontFamily: theme.fonts.family, // Font style
+        fontSize: theme.fonts.size.small,
     },
     addButton: {
         padding: "5px 10px",
-        borderRadius: "10px",
-        backgroundColor: "#5D737E",
-        color: "#F2F2EE",
+        borderRadius: "5px",
+        backgroundColor: theme.colors.darkAccent,
+        color: theme.colors.lightShade,
+        fontSize: '14px',
         border: "none",
         cursor: "pointer",
+        marginRight: '10px',
+    },
+    addedButton: {
+        backgroundColor: 'green',
+        color: theme.colors.lightShade,
+    },
+    loadingMessage: {
+        color: theme.colors.lightShade,
+        marginTop: '10px',
     },
 
 };

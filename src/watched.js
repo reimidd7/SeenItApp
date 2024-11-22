@@ -1,4 +1,5 @@
 import React from "react";
+import theme from "./theme";
 
 const Watched = ({ watched }) => {
     return (
@@ -27,28 +28,35 @@ const styles = {
         display: 'flex',         // Flexbox for alignment
         justifyContent: 'center', // Center children horizontally
         alignItems: 'center',    // Center children vertically
-        backgroundColor: '#718F94',
+        backgroundColor: theme.colors.mainColor,
     
     },
     title: {
-        fontSize: '24px',
+        fontSize: theme.fonts.size.large,
+        fontFamily: theme.fonts.family, // Font style
+        color: theme.colors.lightShade,
         marginBottom: '20px',
     },
     emptyMessage: {
-        fontSize: '16px',
+        fontSize: theme.fonts.size.small,
+        fontFamily: theme.fonts.family, // Font style
+        color: theme.colors.lightShade,
     },
     list: {
         listStyle: 'none',
-        padding: 0,
+        padding: '10px',
         margin: 0,
-        width: '100%',
+       
     },
     listItem: {
-        backgroundColor: '#94A4A4',
+        backgroundColor: theme.colors.darkShade,
         padding: '10px',
         margin: '5px 0',
         borderRadius: '10px',
         textAlign: 'center',
+        color: theme.colors.lightShade,
+        fontFamily: theme.fonts.family, // Font style
+        fontSize: theme.fonts.size.small,
     },
 };
 
