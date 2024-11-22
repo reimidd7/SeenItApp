@@ -34,25 +34,43 @@ const Search = ({ addToWatched }) => {
         return () => clearTimeout(delayDebounce);
     }, [query]);
 
-    const handleAddToWatched = (show) => {
-        addToWatched(show);
-        setAddedShows((prev) => ({
-            ...prev,
-            [show.id]: true, // mark show as added
-        }));
+    const handleAddToWatched = async (show) => {
+        const apiKey = "a4d85f4a0138ffbd06d3be2bfb02dbcf";
+        const detailsUrl = `https://api.themoviedb.org/3/tv/${show.id}?api_key=${apiKey}`;
 
-        // revert button to normal after 2 sec
-        setTimeout(() => {
+        try {
+            const response = await fetch(detailsUrl);
+            const data = await response.json();
+
+            addToWatched({
+                id: data.id,
+                name: data.name,
+                poster_path: data.poster_path,
+                first_air_date: data.first_air_date,
+                number_of_seasons: data.number_of_seasons,
+                networks: data.networks.map((network) => network.name), // Convert to array of network names
+            });
+
             setAddedShows((prev) => ({
                 ...prev,
-                [show.id]: false,
+                [show.id]: true, // mark show as added
             }));
-        }, 2000);
+
+            // revert button to normal after 2 sec
+            setTimeout(() => {
+                setAddedShows((prev) => ({
+                    ...prev,
+                    [show.id]: false,
+                }));
+            }, 2000);
+        } catch (error) {
+            console.error("Error fetching show details ", error);
+        }
     };
 
-    const formatDateRange = (firstAirDate, lastAirDate) => {
+    const formatDateRange = (firstAirDate) => {
         const startYear = firstAirDate ? firstAirDate.slice(0, 4) : "unknown";
-        
+
         return `${startYear}`;
     }
 
@@ -74,7 +92,7 @@ const Search = ({ addToWatched }) => {
                         <p>
                             {show.name}{" "}
                             <span style={styles.date}>
-                            ({formatDateRange(show.first_air_date)})
+                                ({formatDateRange(show.first_air_date)})
                             </span>
                         </p>
                         <button
