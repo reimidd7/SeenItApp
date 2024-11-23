@@ -2,12 +2,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath: '/'
+        path: path.resolve(__dirname, 'build'),
+        filename: 'bundle.js'
     },
     module: {
         rules: [
@@ -17,28 +15,22 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react'],
-                    },
-                },
-            },
-        ],
-    },
-    resolve: {
-        extensions: ['.js', '.jsx'],
+                        presets: ['@babel/preset-react', '@babel/preset-env']
+                    }
+                }
+            }
+        ]
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './public/index.html',
-        }),
+            template: './public/index.html'
+        })
     ],
-    devServer: {
-        static: {
-            directory: path.join(__dirname, 'dist'),
-        },
-        hot: true,
-        port: 3000,
-        historyApiFallback: true
+    resolve: {
+        extensions: ['.js', '.jsx']
     },
-
-    target: 'electron-renderer'
+    devServer: {
+        port: 3000,
+        hot: true
+    }
 };
