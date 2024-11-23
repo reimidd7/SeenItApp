@@ -170,7 +170,7 @@ const styles = {
         marginRight: '10px',
     },
     addedButton: {
-        backgroundColor: 'green',
+        backgroundColor: '#57a564',
         color: theme.colors.lightShade,
     },
     loadingMessage: {
