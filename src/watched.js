@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import theme from "./theme";
 
 const Watched = ({ watched, onRemoveShow, updateShowSeasons }) => {
-    const [showToDelete, setShowToDelete] = useState(null);
+    const [showToDelete, setShowToDelete] = useState(null); // state for the show to be deleted
 
+    // handles click on delete button
     const handleDeleteClick = (show) => {
         setShowToDelete(show);
     };
 
+    // confirmation of delete
     const confirmDelete = () => {
         if (showToDelete) {
             onRemoveShow(showToDelete.id);
@@ -15,14 +17,17 @@ const Watched = ({ watched, onRemoveShow, updateShowSeasons }) => {
         }
     };
 
+    // updates season watched status
     const handleSeasonChange = (showId, season) => {
         updateShowSeasons(showId, season);
     };
 
+    // checks if the show is complete by looking if all seasons are marked watched
     const isShowComplete = (show) => {
         return show.seasonsWatched.length === show.number_of_seasons;
     };
 
+    // sorts shows by completion status
     const sortShows = (shows) => {
         return shows.sort((a, b) => {
             const isAComplete = a.seasonsWatched.length === a.number_of_seasons;

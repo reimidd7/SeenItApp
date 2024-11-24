@@ -7,9 +7,9 @@ const desktopPath = path.join(require('os').homedir(), 'OneDrive', 'Desktop');
 const showsFilePath = path.join(desktopPath, 'watched-shows.json');
 console.log("OneDrive Desktop path:", desktopPath);
 
-
 let mainWindow = null;
 
+// creates the main window
 const createWindow = () => {
     mainWindow = new BrowserWindow({
         width: 1200,
@@ -21,6 +21,7 @@ const createWindow = () => {
         }
         
     });
+
     // In development, load from webpack dev server
     if (process.env.NODE_ENV === 'development') {
         mainWindow.loadURL('http://localhost:3000');
@@ -30,23 +31,27 @@ const createWindow = () => {
     }
 };
 
+// create window when electron is ready
 app.whenReady().then(createWindow);
 
+// quit app when window is closed
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
     }
 });
 
+// mac specific - dont need rn
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
 });
 
-// IPC Handlers for file operations
+// handles saving shows to file
 ipcMain.handle('save-shows-to-file', async (event, shows) => {
     try {
+        // writes show data to file
         await fs.writeFile(showsFilePath, JSON.stringify(shows, null, 2));
         console.log('Saving to file:', showsFilePath);
         return { success: true };
@@ -56,8 +61,10 @@ ipcMain.handle('save-shows-to-file', async (event, shows) => {
     }
 });
 
+// loads shows from file
 ipcMain.handle('load-shows-from-file', async () => {
     try {
+        // reads shows data from file
         const data = await fs.readFile(showsFilePath, 'utf8');
         console.log('LOADING FROM FILE:', showsFilePath);
         return { success: true, shows: JSON.parse(data) };

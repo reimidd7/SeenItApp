@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import theme from "./theme";
 
 const Search = ({ addToWatched }) => {
-    const [query, setQuery] = useState("");
-    const [results, setResults] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [addedShows, setAddedShows] = useState({});
+    const [query, setQuery] = useState(""); // state for search query
+    const [results, setResults] = useState([]); // state for search results
+    const [isLoading, setIsLoading] = useState(false); // state for loading indicator
+    const [addedShows, setAddedShows] = useState({}); // state for tracing added shows
 
+    // useEffect hook to fetch search results based on query
     useEffect(() => {
         const fetchResults = async () => {
             if (!query.trim()) {
@@ -29,11 +30,13 @@ const Search = ({ addToWatched }) => {
             }
         };
 
+        // delay bounce to avoid excessive API calls
         const delayDebounce = setTimeout(fetchResults, 300);
 
         return () => clearTimeout(delayDebounce);
     }, [query]);
 
+    // adds a show and it info to the watch list
     const handleAddToWatched = async (show) => {
         const apiKey = "a4d85f4a0138ffbd06d3be2bfb02dbcf";
         const detailsUrl = `https://api.themoviedb.org/3/tv/${show.id}?api_key=${apiKey}`;
@@ -68,6 +71,7 @@ const Search = ({ addToWatched }) => {
         }
     };
 
+    // formats when the show first aired
     const formatDateRange = (firstAirDate) => {
         const startYear = firstAirDate ? firstAirDate.slice(0, 4) : "unknown";
 

@@ -4,12 +4,14 @@ import Header from './header';
 import Search from './search';
 import Watched from './watched';
 
+// main app component
 const App = () => {
-    const [currentTab, setCurrentTab] = useState('home');
-    const [watched, setWatched] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    // state variables
+    const [currentTab, setCurrentTab] = useState('home'); // tracks currently selected tab
+    const [watched, setWatched] = useState([]); // stores watched shows
+    const [isLoading, setIsLoading] = useState(true); // tracks loading state
 
-    // Load shows when app starts
+    // useEffect hook to load shows when app starts
     useEffect(() => {
         const loadShows = async () => {
             try {
@@ -38,6 +40,7 @@ const App = () => {
         loadShows();
     }, []);
 
+    // adds a show to the watch list
     const addToWatched = async (show) => {
         if (!watched.some((item) => item.id === show.id)) {
             const updatedWatched = [...watched, { ...show, seasonsWatched: [] }];
@@ -53,11 +56,11 @@ const App = () => {
                 await window.api.saveShowsToFile(updatedWatched);
             } catch (error) {
                 console.error('Error saving shows:', error);
-                // Optionally show error to user
             }
         }
     };
 
+    // removes a show from the watch list
     const removeFromWatched = async (showId) => {
         const updatedWatched = watched.filter(show => show.id !== showId);
 
@@ -75,6 +78,7 @@ const App = () => {
         }
     };
 
+    // updates the seasons watched for a show
     const updateShowSeasons = async (showId, season) => { 
         const updatedWatched = watched.map(show => { 
             if (show.id === showId) { 
@@ -97,6 +101,7 @@ const App = () => {
         } 
     };
 
+    // incomplete shows filter
     const incompleteShows = watched.filter(show => show.seasonsWatched.length < show.number_of_seasons);
 
     if (isLoading) {
