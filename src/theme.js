@@ -5,6 +5,7 @@ const theme = {
         mainColor: '#718F94',
         darkAccent: '#8790A1',
         darkShade: '#455861',
+        complete: '#343A3A',
     },
     fonts: {
         family: 'verdana, sans-serif',

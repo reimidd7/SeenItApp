@@ -97,6 +97,8 @@ const App = () => {
         } 
     };
 
+    const incompleteShows = watched.filter(show => show.seasonsWatched.length < show.number_of_seasons);
+
     if (isLoading) {
         return <div>Loading your shows...</div>;
     }
@@ -105,7 +107,7 @@ const App = () => {
         <div>
             <Header currentTab={currentTab} setCurrentTab={setCurrentTab} />
             {currentTab === 'home' && (
-                <Home setCurrentTab={setCurrentTab} />
+                <Home setCurrentTab={setCurrentTab} incompleteShows={incompleteShows}/>
             )}
             {currentTab === 'search' && (
                 <Search addToWatched={addToWatched} />

@@ -17,7 +17,25 @@ const Watched = ({ watched, onRemoveShow, updateShowSeasons }) => {
 
     const handleSeasonChange = (showId, season) => {
         updateShowSeasons(showId, season);
-    }
+    };
+
+    const isShowComplete = (show) => {
+        return show.seasonsWatched.length === show.number_of_seasons;
+    };
+
+    const sortShows = (shows) => {
+        return shows.sort((a, b) => {
+            const isAComplete = a.seasonsWatched.length === a.number_of_seasons;
+            const isBComplete = b.seasonsWatched.length === b.number_of_seasons;
+
+            // Sort incomplete shows before complete ones
+            if (isAComplete && !isBComplete) return 1;
+            if (!isAComplete && isBComplete) return -1;
+            return 0;
+        });
+    };
+
+    const sortedWatched = sortShows(watched);
 
     return (
         <div style={styles.container}>
@@ -26,8 +44,14 @@ const Watched = ({ watched, onRemoveShow, updateShowSeasons }) => {
                 <p style={styles.emptyMessage}>You haven't added any shows yet.</p>
             ) : (
                 <div style={styles.list}>
-                    {watched.map((show) => (
-                        <div key={show.id} style={styles.listItem}>
+                    {sortedWatched.map((show) => (
+                        <div 
+                        key={show.id} 
+                        style={{
+                            ...styles.listItem,
+                            backgroundColor: isShowComplete(show) ? theme.colors.complete : theme.colors.darkShade
+                        }}
+                        >
                             {/*poster*/}
                             <img
                                 src={`https://image.tmdb.org/t/p/w200${show.poster_path}`}
@@ -42,7 +66,9 @@ const Watched = ({ watched, onRemoveShow, updateShowSeasons }) => {
                                     <span style={styles.network}>{show.networks?.join(", ") || "Unknown"}</span>{" "}
                                     <span style={styles.seasons}>{show.number_of_seasons} Seasons</span>
                                 </p>
-                                <div style={styles.seasonsList}>
+                                <div style={styles.seasonsContainer}>
+                                <h4 style={styles.seasonTitle}>Seasons:</h4>
+                                <div style={styles.seasonsList}> 
                                     {Array.from({ length: show.number_of_seasons }, (_, i) => (
                                         <label key={i} style={styles.seasonLabel}>
                                             <input
@@ -53,6 +79,7 @@ const Watched = ({ watched, onRemoveShow, updateShowSeasons }) => {
                                             {i + 1}
                                         </label>
                                     ))}
+                                    </div>
                                 </div>
                                 <button style={styles.deleteButton} onClick={() => handleDeleteClick(show)}>
                                     delete
@@ -123,18 +150,20 @@ const styles = {
     details: {
         marginLeft: "15px",
         display: "flex",
-        justifyContent: "space-around",
+        flexDirection: "column", 
+        justifyContent: "center", 
+        flex: 1,
     },
     titleText: {
         fontSize: theme.fonts.size.medium,
         fontFamily: theme.fonts.family,
         color: theme.colors.lightShade,
-        marginRight: "15px",
-
+        margin: '5px 0',
     },
     subDetails: {
         fontSize: theme.fonts.size.small,
         color: theme.colors.lightAccent,
+        margin: '5px 0',
     },
     year: {
         fontStyle: "italic",
@@ -145,6 +174,28 @@ const styles = {
     seasons: {
         fontWeight: "bold",
     },
+    seasonsContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      margin: '5px 0',
+    },
+    seasonTitle : {
+        fontSize: theme.fonts.size.medium,
+        color: theme.colors.lightAccent,
+        fontFamily: theme.fonts.family,
+        marginRight: '10px',
+    },
+    seasonsList: {
+        display: 'flex',
+        flexWrap: 'wrap',  
+    },
+    seasonLabel: {
+        margin: '0 10px 0px 0',
+        display: 'flex',
+        alignItems: 'center',
+        color: theme.colors.lightShade,
+    },
+
     deleteButton: {
         position: "absolute",
         right: "10px",
@@ -157,18 +208,7 @@ const styles = {
         cursor: "pointer",
         opacity: '0.5',
     },
-    seasonsList: {
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        margin: '10px 0',
-    },
-    seasonLabel: {
-        margin: '0 10px 10px 0',
-        display: 'flex',
-        alignItems: 'center',
-        color: theme.colors.lightShade,
-    },
+    
     popup: {
         position: "fixed",
         top: "50%",
