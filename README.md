@@ -13,9 +13,16 @@ Currently, no public installation due to limited API access.
 - **Home Tab:** Indicated be SeenIt logo. Displays TV shows that have seasons left to watch
 - **Search Tab:** Allows users to search for TV Shows and add them to their watched list.
 - **Watched Tab:** Displays the list of watched shows with options to update seasons watched or removed shows. Shows that have all seasons watched change colors and move to bottom of the list.
-![Screenshot of Home Tab](https://github.com/user-attachments/assets/17fef2ae-fbd9-4b4b-8d73-56a8d158159c)
-![Screenshot of Search Tab](https://github.com/user-attachments/assets/404bdb03-e888-44a6-8296-fb42af00ea4c)
-![Screenshot of Watched Tab](https://github.com/user-attachments/assets/44000289-d343-428b-bd4f-3b479eba1258)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/17fef2ae-fbd9-4b4b-8d73-56a8d158159c" alt="Screenshot of Home Tab" title="HomeTab" width="300" />
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/404bdb03-e888-44a6-8296-fb42af00ea4c" alt="Screenshot of Search Tab" title="SearchTab" width="300" />
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/44000289-d343-428b-bd4f-3b479eba1258" alt="Screenshot of Watched Tab" title="WatchedTab" width="300" />
+</p>
+
 
 ## Features
 - Search TV shows using The Movie Database (TMDb) API.
